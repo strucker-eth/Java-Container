@@ -1,0 +1,77 @@
+<project name="PrimeGenerator" default="build">
+
+    <!-- Define properties -->
+    <property name="ex.dir" value="." />
+    <property name="main.class" value="PrimeGenerator" />
+
+    <!-- Define the classpath -->
+    <path id="classpath">
+        <fileset dir="${ex.dir}/lib">
+            <!-- Download JUnit JAR files -->
+            <include name="junit-*.jar"/>
+        </fileset>
+    </path>
+
+    <!-- Initialization Target -->
+    <target name="init">
+        <mkdir dir="${ex.dir}/build/main" />
+        <mkdir dir="${ex.dir}/build/test" />
+        <echo message="Initialization complete"/>
+    </target>
+
+    <!-- Compile main task -->
+    <target name="compile-main" depends="init">
+        <javac srcdir="${ex.dir}/src/main" destdir="${ex.dir}/build/main" classpathref="classpath" includeantruntime="false" />
+        <echo message="Main compilation complete"/>
+    </target>
+
+    <!-- Compile test task -->
+    <target name="compile-test" depends="init">
+        <javac srcdir="${ex.dir}/src/test" destdir="${ex.dir}/build/test" classpathref="classpath" includeantruntime="false" />
+        <echo message="Test compilation complete"/>
+    </target>
+
+    <!-- Run test cases (test methods) in PrimeGeneratorTest -->
+    <target name="run-tests" depends="compile-test">
+        <!-- Define the appropriate command to run the tests -->
+        <java classname="PrimeGeneratorTest" classpath="${ex.dir}/build/test" fork="true"/>
+    </target>
+
+    <!-- Clean task -->
+    <target name="clean">
+        <delete dir="${ex.dir}/build" />
+        <delete file="${ex.dir}/ex2.jar" />
+        <echo message="Cleaned build directory"/>
+    </target>
+
+    <!-- Build task (main) -->
+    <target name="build-main" depends="compile-main">
+        <jar destfile="${ex.dir}/ex2-main.jar" basedir="${ex.dir}/build/main">
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}" />
+            </manifest>
+        </jar>
+        <echo message="Main JAR built successfully"/>
+    </target>
+
+    <!-- Build task (test) -->
+    <target name="build-test" depends="compile-test">
+        <jar destfile="${ex.dir}/ex2-test.jar" basedir="${ex.dir}/build/test">
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}" />
+            </manifest>
+        </jar>
+        <echo message="Test JAR built successfully"/>
+    </target>
+
+    <!-- Default build task -->
+    <target name="build" depends="build-main, build-test">
+        <echo message="Build complete"/>
+    </target>
+
+    <!-- Compile target -->
+    <target name="compile" depends="compile-main, compile-test">
+        <echo message="Compilation complete"/>
+    </target>
+
+</project>
