@@ -15,7 +15,7 @@ public class PrimeGenerator {
     public void generatePrimes() {
         for (long num = from; num <= to; num++) {
             if (isPrime(num)) {
-                primes.add(num);
+                primes.add(num); // <- semicolon added here
             }
         }
     }
